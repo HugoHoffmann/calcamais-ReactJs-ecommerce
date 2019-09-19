@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux';
 import { MdRemoveCircleOutline, MdAddCircleOutline, MdDelete } from 'react-icons/md';
 import { Container, ProductTable, Total } from './styles';
 import * as CartActions from '../../store/modules/cart/actions';
+import { formatPrice } from '../../util/format';
 
-function Cart({ cart, removeToCart, updateAmount }) {
+function Cart({ cart, total, removeFromCart, updateAmount }) {
   function increment(product){
     updateAmount(product.id, product.amount + 1)
   }
@@ -46,10 +47,10 @@ function Cart({ cart, removeToCart, updateAmount }) {
                 </div>
               </td>
               <td>
-                <strong>R$ 300,00</strong>
+                <strong>{product.subtotal}</strong>
               </td>
               <td>
-                <button type="button" onClick={()=> removeToCart(product) }>
+                <button type="button" onClick={()=> removeFromCart(product) }>
                   <MdDelete size={20} color="#7159c1"/>
                 </button>
               </td>
@@ -64,7 +65,7 @@ function Cart({ cart, removeToCart, updateAmount }) {
         </button>
         <Total>
           <span>TOTAL</span>
-          <strong>R$1000,00</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>   
@@ -75,6 +76,14 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(CartActions, dispatch);
 
 const mapStateToProps = state => ({
-  cart: state.cart,
+  cart: state.cart.map(product => ({
+    ...product, 
+    subtotal: formatPrice(product.price * product.amount)
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, product) =>{
+      return total + product.price * product.amount;
+    }, 0)
+  )
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
