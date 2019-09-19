@@ -15,11 +15,11 @@ export default function cart(state = [], action){
                 }
 
             });
-        case '@cart/UPDATE_AMOUNT':{
+        case '@cart/UPDATE_AMOUNT_SUCCESS':{
             // responsabilidade do redux verificar se a qtd é 1
-            if(action.amount <= 0){
-                return state;
-            }
+            // if(action.amount <= 0){
+            //     return state;
+            // }
 
             return produce(state, draft =>{
                 const productIndex = draft.findIndex(p => p.id === action.id);
