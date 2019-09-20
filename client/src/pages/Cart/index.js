@@ -50,7 +50,7 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
                 <strong>{product.subtotal}</strong>
               </td>
               <td>
-                <button type="button" onClick={()=> removeFromCart(product) }>
+                <button type="button" onClick={()=> removeFromCart(product.id) }>
                   <MdDelete size={20} color="#7159c1"/>
                 </button>
               </td>
